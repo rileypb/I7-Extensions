@@ -109,10 +109,10 @@ Provides a global backdrop for ceilings. Descriptions of ceilings can be set for
 
 Custom messages are defined in the Table of Ceilings as below
 
-Table of Ceilings (continued)
-locale (a room)	has ceiling (a truth state)	ceiling description (a text)	touch description (a text)	low ceiling (a truth state)
-Quiet Glade	--	"Sunlight filters down through the branches."
-Damp Cave	--	"The low ceiling of the cave drips moisture."	"The ceiling is rough and wet."	true
+	Table of Ceilings (continued)
+	locale (a room)	has ceiling (a truth state)	ceiling description (a text)	touch description (a text)	low ceiling (a truth state)
+	Quiet Glade	--	"Sunlight filters down through the branches."
+	Damp Cave	--	"The low ceiling of the cave drips moisture."	"The ceiling is rough and wet."	true
 	
 Indoor rooms (defined in the extension PBR Common by Philip Riley) have ceilings by default, where outdoor and floating rooms do not. One can still define messages for rooms without ceilings, and they will be displayed. This is useful for explaining the lack of ceilings, for instance.
 
@@ -140,4 +140,5 @@ Example: A quiet glade by a cave
 	Quiet Glade	--	"Sunlight filters down through the branches."
 	Damp Cave	--	"The low ceiling of the cave drips moisture."	"The ceiling is rough and wet."	true
 	
-	Test me with "x wall/touch wall/rub wall/take wall/n/x wall/touch wall/rub wall/take wall";
+	Test me with "x ceiling/touch ceiling/rub ceiling/take ceiling/n/x ceiling/touch ceiling/rub ceiling/take ceiling";
+	
