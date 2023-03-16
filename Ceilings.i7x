@@ -105,15 +105,16 @@ Ceilings ends here.
 
 ---- DOCUMENTATION ----
 
-Provides a global backdrop for walls. Descriptions of walls can be set for each room via a table interface. Rooms can be specified as not having walls. Examining, Touching, and Rubbing walls all produce intelligent messages.
+Provides a global backdrop for ceilings. Descriptions of ceilings can be set for each room via a table interface. Rooms can be specified as not having ceilings. Ceilings are by default too high to touch, but can be made low-ceilinged. Examining, Touching, and Rubbing walls all produce intelligent messages. 'look up' is remapped to 'examing ceiling'.
 
-Custom messages are defined in the Table of Walls as below
+Custom messages are defined in the Table of Ceilings as below
 
-	Table of Walls (continued)
-	locale (a room)		has walls (a truth state)		wall description (a text)		touch description
-	Cave		--		"The rocky walls of the cave bleed moisture."		"[We] [run] [our] hand across the rough surface of the cave wall."
+Table of Ceilings (continued)
+locale (a room)	has ceiling (a truth state)	ceiling description (a text)	touch description (a text)	low ceiling (a truth state)
+Quiet Glade	--	"Sunlight filters down through the branches."
+Damp Cave	--	"The low ceiling of the cave drips moisture."	"The ceiling is rough and wet."	true
 	
-Indoor rooms (defined in the extension PBR Common by Philip Riley) have walls by default, where outdoor and floating rooms do not. One can still define messages for rooms without walls, and they will be displayed. This is useful for explaining the lack of walls, for instance.
+Indoor rooms (defined in the extension PBR Common by Philip Riley) have ceilings by default, where outdoor and floating rooms do not. One can still define messages for rooms without ceilings, and they will be displayed. This is useful for explaining the lack of ceilings, for instance.
 
 Example: A quiet glade by a cave
 
