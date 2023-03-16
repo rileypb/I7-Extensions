@@ -1,4 +1,4 @@
-Can't Go That Way by Philip Riley begins here.
+Version 1 of Can't Go That Way by Philip Riley begins here.
 
 Include Floors by Philip Riley.
 
