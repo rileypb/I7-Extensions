@@ -1,4 +1,6 @@
-Version 3/210331 of Gender Options by Nathanael Nerode begins here.
+Version 4/000000 of Inclusive Gender Options by Philip Riley begins here.
+
+"The vast majority of this code is from Gender Options by Nathanael Nerode. Some code by Zed Lopez."
 
 "More broad-minded English language gender/number model where male, female, and neuter are three separate true-false properties.  Allows for objects to respond to any specified combination of HE, SHE, IT, and THEY.  As fast as the Standard Rules.  Tested with Inform 6M62."
 
@@ -1192,7 +1194,7 @@ To have the parser notice (o - an object):
 To notice (o - an object) boringly:
 	set pronouns from o.
 	
-Gender Options ends here.
+Inclusive Gender Options ends here.
 
 ---- DOCUMENTATION ----
 
