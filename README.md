@@ -1,6 +1,8 @@
 # I7-Extensions
 My Published Extensions
 
+[Known to work with 6M62]
+
 ## Can't Go That Way
 
 Makes it easier to add custom messages instead of "can't go that way".
