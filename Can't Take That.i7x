@@ -1,4 +1,4 @@
-Version 1 of Can't Take That by Philip Riley begins here.
+Version 1/230318 of Can't Take That by Philip Riley begins here.
 
 Table of Frustrated Taking
 target (a thing)	message (a text)	move message (a text)
@@ -20,8 +20,6 @@ The can't move that rules is a thing based rulebook producing texts.
 can't move that of a thing (called T) (this is the standard can't move that rule):
 	if there is a move message corresponding to a target of T in the Table of Frustrated Taking:
 		rule succeeds with result the move message corresponding to a target of T in the Table of Frustrated Taking;
-	if there is a message corresponding to a target of T in the Table of Frustrated Taking:
-		rule succeeds with result the message corresponding to a target of T in the Table of Frustrated Taking;
 	rule succeeds with result "[We] [can't] move that." (A);
 	
 To decide what text is the can't move message of (T - a thing):
@@ -44,13 +42,10 @@ Can't Take That ends here.
 
 ---- DOCUMENTATION ----
 
-This extension enables the easy specification of custom messages to substitute for "You can't take that."
+This extension enables the easy specification of custom messages to substitute for "You can't take that." and "You can't move that", without having to clutter your code with lots of instead rules. 
 
-Messages are specified in the Table of Frustrated Taking.
-	
-	Table of Frustrated Taking
-	target (a thing)	message (a text)	move message (a text)
-	with 1 blank row.
+Messages are specified in the Table of Frustrated Taking as shown in the example below.
+
 	
 Example: Storeroom
 
