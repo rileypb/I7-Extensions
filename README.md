@@ -19,6 +19,10 @@ Provides for custom descriptions of ceilings in an entire story.
   
 Provides for custom descriptions of floors in an entire story.
 
+## Inclusive Gender Options
+
+An update of Gender Options by Nathanael Nerode to add non-binary gender, as well as the singular they pronoun. In development.
+
 ## Walls
   
 Provides for custom descriptions of walls in an entire story.
