@@ -1225,6 +1225,16 @@ The plural-named property is also used for the items like "the trees" which are 
 
 Please note that for a thing which is ambiguously plural but singular-named, such as "pair of dice", the substitution "[they're]" will produce "that's", while "[they]['re]" will produce "it's".  Choose wisely!
 
+Section - Special third person mode
+
+	special third person mode is true.
+	
+This option causes third person viewpoint stories to use the player's name when first referred to, and pronouns after that. For instance, if the player's name were "Bob", the text
+
+	"[We] [are] tall. [We] [tower] over most people [we] [meet]."
+	
+would yield "Bob is tall. He towers over most people he meets."
+
 Section - Printing differences from standard behavior
 
 For reference, this is the procedure currently used in the Standard Rules as of the time of writing:
@@ -1524,4 +1534,75 @@ Example: * No0neman's Test - No0neman wanted to make sure that Alex would no lon
 
 	test unsetting with "masculinize alex / x him / x her / x them / x it / feminize alex / x him / x her / x them / x it / ungender alex / x him / x her / x them / x it"
 	
+Example: * Andy's Chocolate - Testing special third person mode
+
+	*: "The Third Person"
+
+Include Inclusive Gender Options by Philip Riley.
+
+The starting room is a room.
+Some chocolate is an edible thing in the starting room.
+
+The player is in the starting room. The third singular pronoun is the he-pronoun. [Defaults to the singular-they-pronoun.]
+
+[Need this or the game will print the player's name as "himself", "herself", etc.]
+Rule for printing the name of yourself:
+	say "Andy";
+
+Special third person mode is true.
+
+When play begins:
+	Now the story viewpoint is third person singular;
+	
+To love is a verb. To keep is a verb.
+
+Instead of eating the chocolate:
+	say "[We] [eat] [the chocolate]. [We] [love] chocolate, and generally [keep] it all to [ourselves].";
+
+Feminizing is an action applying to nothing.
+
+Masculinizing is an action applying to nothing.
+
+Ungendering is an action applying to nothing.
+
+Neuterizing is an action applying to nothing.	
+
+Understand "feminize" as feminizing.
+
+Understand "masculinize" as masculinizing.
+
+Understand "ungender" as ungendering.
+
+Understand "neuter" as neuterizing.
+
+Carry out feminizing:
+	now the player is not neuter;
+	now the player is not male;
+	now the player is not non-conforming;
+	now the player is female;
+	now the third singular pronoun of the player is the she-pronoun;
+
+Carry out masculinizing:
+	now the player is not neuter;
+	now the player is not female;
+	now the player is not non-conforming;
+	now the player is male;
+	now the third singular pronoun of the player is the he-pronoun;
+
+Carry out ungendering:
+	now the player is not neuter;
+	now the player is not female;
+	now the player is not male;
+	now the player is non-conforming;
+	now the third singular pronoun of the player is the singular-they-pronoun;
+
+Carry out neuterizing:
+	now the player is neuter;
+	now the player is not female;
+	now the player is not male;
+	now the player is not non-conforming;
+	now the third singular pronoun of the player is the it-pronoun;
+
+test me with "eat chocolate / feminize / eat chocolate / ungender / eat chocolate / neuter / eat chocolate / masculinize / eat chocolate".
+
 	
