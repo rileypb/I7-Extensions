@@ -1,22 +1,18 @@
-Version 4/000000 of Inclusive Gender Options by Philip Riley begins here.
+Version 4.1.230326 of Inclusive Gender Options by Philip Riley begins here.
 
-"The vast majority of this code is from Gender Options by Nathanael Nerode. Some code by Zed Lopez."
+"More broad-minded English language gender/number model where male, female, non-conforming, and neuter are four separate true-false properties.  Allows for objects to respond to any specified combination of HE, SHE, IT, and THEY.  As fast as the Standard Rules.  Tested with Inform v10.1.0."
 
-"More broad-minded English language gender/number model where male, female, and neuter are three separate true-false properties.  Allows for objects to respond to any specified combination of HE, SHE, IT, and THEY.  As fast as the Standard Rules.  Tested with Inform 6M62."
+[We replace very, very specific bits of the standard rules. This is based on Inform v10.1.0]
 
-[We replace very, very specific bits of the standard rules. This is based on 2/090402.]
-
-Include English Language by Graham Nelson.
 Include Standard Rules by Graham Nelson.
 
-
-Volume 1 - Enhanced Gender and Number Model
+Volume - Enhanced Gender and Number Model
 
 [Make male, female, and neuter independent.]
 
-Chapter 1 - Replace Standard Rules Elements Always
+Chapter - Replace Standard Rules Elements Always
 
-Section SR1/11 - People and things with gender (in place of Section SR1/11 - People in Standard Rules by Graham Nelson)
+Section 11 - People and things with gender (in place of Section 11 - People in Standard Rules by Graham Nelson)
 
 [These must overrride all other definitions.]
 A thing can be neuter.  A thing is usually neuter.
@@ -27,95 +23,35 @@ A thing can be non-conforming. A thing is usually not non-conforming.
 The non-conforming property translates into I6 as "non_conforming".
 
 Include (-
-Attribute absent; ! Used to mark objects removed from play
-Attribute animate; ! I6-level marker for I7 kind "person"
-Attribute clothing; ! = I7 "wearable"
-Attribute concealed; ! = I7 "undescribed"
-Attribute container; ! I6-level marker for I7 kind "container"
-Attribute door; ! I6-level marker for I7 kind "door"
-Attribute edible; ! = I7 "edible" vs "inedible"
-Attribute enterable; ! = I7 "enterable"
-Attribute light; ! = I7 "lighted" vs "dark"
-Attribute lockable; ! = I7 "lockable"
-Attribute locked; ! = I7 "locked"
-Attribute moved; ! = I7 "handled"
-Attribute on; ! = I7 "switched on" vs "switched off"
-Attribute open; ! = I7 "open" vs "closed"
-Attribute openable; ! = I7 "openable"
-Attribute scenery; ! = I7 "scenery"
-Attribute static; ! = I7 "fixed in place" vs "portable"
-Attribute supporter; ! I6-level marker for I7 kind "supporter"
-Attribute switchable; ! I6-level marker for I7 kind "device"
-Attribute talkable; ! Not currently used by I7, but retained for possible future use
-Attribute transparent; ! = I7 "transparent" vs "opaque"
-Attribute visited; ! = I7 "visited"
-Attribute worn; ! marks that an object tree edge represents wearing
+Attribute non_conforming;
+-)
 
-Attribute male; ! not directly used by I7, but available for languages with genders
-Attribute female; ! = I7 "female" vs "male"
-Attribute neuter; ! = I7 "neuter"
-Attribute non_conforming; ! = I7 "non-conforming"
-Attribute pluralname; ! = I7 "plural-named"
-Attribute ambigpluralname; ! = I7 "ambiguously plural"
-Attribute proper; ! = I7 "proper-named"
-Attribute remove_proper; ! remember to remove proper again when using ChangePlayer next
 
-Attribute privately_named; ! New in I7
-Attribute mentioned; ! New in I7
-Attribute pushable; ! New in I7
+[Ambiguously plural is defined in Basic Inform.  It isn't fully implemented, however.  It allows for "ambiguously plural" nouns like "a pair of shoes".  We need this line but it's in Basic Inform.i7x so we don't need it here:]
+[An object can be ambiguously plural.]
 
-Attribute mark_as_room; ! Used in I7 to speed up testing "ofclass K1_room"
-Attribute mark_as_thing; ! Used in I7 to speed up testing "ofclass K2_thing"
-
-Attribute workflag; ! = I7 "marked for listing", but basically temporary workspace 
-Attribute workflag2; ! new in I7 and also temporary workspace
-Constant list_filter_permits = privately_named; ! another I7 listwriter convenience
--) instead of "Template Attributes" in "Definitions.i6t" 
-
-Include (-
-{-call:Properties::alias_translations}
-{-call:Properties::ObjectImplementation::compile_attributes}
-{-array:Properties::ObjectImplementation::property_metadata}
-Constant attributed_property_offsets_SIZE 64;
-Array attributed_property_offsets --> attributed_property_offsets_SIZE;
-Constant valued_property_offsets_SIZE (100 + {-value:NUMBER_CREATED(property)} + INDIV_PROP_START-48);
-Array valued_property_offsets --> valued_property_offsets_SIZE;
-
-{-routine:Properties::ObjectImplementation::CreatePropertyOffsets}
--) instead of "Properties" in "Output.i6t"
-
-[Ambiguously plural is defined in Standard Rules.  It isn't fully implemented, however.  It allows for "ambiguously plural" nouns like "a pair of shoes".  This line already exists in SR1/1 and is essentially redundant, but we need it, so restate it in case Standard Rules moves it or something.]
-An object can be ambiguously plural.
-
-[Beginning of text from original section SR1/11.]
+[Beginning of text from original Section 11.]
 
 The specification of person is "Despite the name, not necessarily
 a human being, but anything animate enough to envisage having a
 conversation with, or bartering with."
 
-Include (-
-	has transparent animate
-	with before NULL,
--) when defining a person.
-
 A person has a number called carrying capacity.
 The carrying capacity of a person is usually 100.
 
+[Standard Rules says "A person is always transparent", which is an unnecessary restriction on the story writer.]
+A person can be transparent.  A person is usually transparent.
+
 The yourself is an undescribed person. The yourself is proper-named.
 
-The yourself object translates into I6 as "selfobj".
-Include (-
-	with saved_short_name "yourself",
- -) when defining yourself.
+The yourself is privately-named.
+Understand "your former self" or "my former self" or "former self" or "former" as yourself when the player is not yourself.
 
+The yourself object translates into Inter as "selfobj".
 
-A grammatical gender is a kind of value. The grammatical genders are
-neuter gender, masculine gender, feminine gender.
-The neitherine gender is a grammatical gender.
+Section SR2.3.11A - Assumptions about people
 
-Section SR1/11 C - Assumptions about people
-
-[This section is separated out in case someone wants to replace it.]
+[This section is separated out in case someone wants to replace it.  Sadly, Section is the smallest heading, so we can't embed this into the existing structure]
 
 A person is usually not neuter.
 
@@ -124,9 +60,9 @@ A person is usually male.
 A person is usually non-conforming.
 [* This is less weird than it appears.  If you make a generic, unnamed person, the player can refer to said person as "him" or "her", interchangably.]
 
-Section SR1/12 - Animals, men and women revised (in place of Section SR1/12 - Animals, men and women in Standard Rules by Graham Nelson)
+Section 12 - Animals, men and women revised (in place of Section 12 - Animals, men and women in Standard Rules by Graham Nelson)
 
-The plural of man is men. The plural of woman is women. The plural of non-binary is non-binaries.
+The plural of man is men. The plural of woman is women. The plural of nonbinary is nonbinaries.
 
 A man is a kind of person.
 The specification of man is "Represents a man or boy."
@@ -142,12 +78,12 @@ A woman is usually not male.
 A woman is usually not neuter.
 A woman is usually not non-conforming.
 
-A non-binary is a kind of person.
-The specification of non-binary is "Represents a person who identifies as a gender other than male or female."
-A non-binary is usually non-conforming.
-A non-binary is usually not male.
-A non-binary is usually not female.
-A non-binary is usually not neuter.
+A nonbinary is a kind of person.
+The specification of nonbinary is "Represents a person who identifies as a gender other than male or female."
+A nonbinary is usually non-conforming.
+A nonbinary is usually not male.
+A nonbinary is usually not female.
+A nonbinary is usually not neuter.
 
 An animal is a kind of person.
 An animal is usually not male.
@@ -160,33 +96,34 @@ The specification of animal is "Represents an animal, or at any rate a
 non-human living creature reasonably large and possible to interact with: a
 giant Venus fly-trap might qualify, but not a patch of lichen."
 
-Section SR1/16 A - Inform 6 equivalent for male
+Section SR2.3.12A  - Inform 6 equivalent for male
 
-[This saves a property since Inform 6 already has an unused male property.  This is actually only *required* for compatibility with Original Parser, which uses the term 'linguistically male' for what has to be the same property.]
-The male property translates into I6 as "male".
+[This saves a property since Inform 6 already has an unused male property.  This is actually only *required* for compatibility with Original Parser, which uses the term 'linguistically male' for what has to be the same property.  Several other properties must also have Inter translations but the ones in Standard Rules will do fine for our purposes.]
+The male property translates into Inter as "male".
 
-Chapter 2A - Yourself Description - Standard
+Chapter - Yourself Description - Standard
 
-Section SR1/11 A - Yourself Description 
+Section SR2.3.11B - Yourself Description 
 
 [ this is (for use without Neutral Standard Responses by Nathanael Nerode) ]
 
 The description of yourself is usually "As good-looking as ever."
 
-Chapter 2B - Yourself Description (for use with Neutral Standard Responses by Nathanael Nerode)
+Chapter - Yourself Description (for use with Neutral Standard Responses by Nathanael Nerode)
 
 [We do it this way so that we can handle other extensions which interfere with the same text in the same way.  Which is likely.]
 
-Section SR1/11 A - Deleted Yourself Description (in place of Section SR1/11 A - Yourself Description in Gender Options by Nathanael Nerode)
+Section SR2.3.11B - Deleted Yourself Description (in place of Section SR2.3.11B - Yourself Description in Gender Options by Nathanael Nerode)
 
-dummy_variable_1234567890 is a truth state that varies.
-[* We don't need to give a description, because Neutral Standard Responses does.  Unfortunately, there must be something, not a commment, in every section or bug 0001841 causes a compiler crash.  This is the smallest possible dummy we can create, occupying between 1 bit and 1 byte.]
+[ We don't need to give a description, because Neutral Standard Responses does. ]
+[ In Inform version 6M62 (9.3) and earlier, there must be something, not a comment, in every section or bug 0001841 causes a compiler crash.  This is the smallest possible dummy we can create, occupying between 1 bit and 1 byte.  this is unnecessary in Inform v10.]
+[ dummy_variable_1234567890 is a truth state that varies. ]
 
-Volume 2 - Parser Modifications for Pronoun Handling
+Volume - Parser Modifications for Pronoun Handling
 
 [Make pronouns behave properly.]
 
-Part 1 - Zed's Stuff
+Book - Additions by Zed Lopez in support of singular they
 
 most-recent-reference-value is a kind of value.
 The most-recent-reference-values are nominal and pronominal.
@@ -195,37 +132,9 @@ The most recent reference property translates into i6 as "most_recent_reference"
 The most recent reference of a thing is usually nominal.
 Before printing the name of a thing (called item): now the most recent reference of the item is nominal.
 
+Special third person mode is a truth state that varies.
+
 Include (-
-
-
-[ RegardingMarkedObjects
-	obj length g gc;
-	gc = -2;
-	objectloop (obj ofclass Object && obj has workflag2) {
-		length++;
-		g = GetGNAOfObject(obj); g = g%3;
-		if (gc == -2) {
-			gc = g;
-			prior_named_noun = obj;
-		} else if (gc ~= g) gc = -1;
-	}
-	prior_named_list = length;
-	prior_named_list_gender = gc;
-	if (length == 0) { prior_named_noun = nothing; prior_named_list_gender = -1; }
-	return;	
-];
-
-[ RegardingSingleObject obj;
-	prior_named_list = 1;
-	prior_named_list_gender = -1;
-	prior_named_noun = obj;
-];
-
-[ RegardingNumber n;
-	prior_named_list = n;
-	prior_named_list_gender = -1;
-	prior_named_noun = nothing;
-];
 
 [ PNToVP ; ! gna;
     if (prior_named_list >= 2) return 6;
@@ -239,22 +148,7 @@ Include (-
 	return 3;
 ];
 
-[ PrintVerbAsValue vb;
-	if (vb == 0) print "(no verb)";
-	else { print "verb "; vb(1); }
-];
-
-[ VerbIsMeaningful vb;
-	if ((vb) && (BlkValueCompare(vb(CV_MEANING), Rel_Record_0) ~= 0)) rtrue;
-	rfalse;
-];
-
-[ VerbIsModal vb;
-	if ((vb) && (vb(CV_MODAL))) rtrue;
-	rfalse;
-];
--) instead of "List Number and Gender" in "ListWriter.i6t".
-
+-) replacing "PNToVP".
 
 A pronoun is a kind of object.
 
@@ -344,9 +238,9 @@ The third singular pronoun of a man is usually he-pronoun.
 The third singular pronoun of a woman is usually she-pronoun.
 
 
-Part 1 - Universal Fix
+Part - Universal Fix
 
-Chapter 1 - Fix Pronoun Bitmask Table
+Chapter - Fix Pronoun Bitmask Table
 
 [Aw heck.  After all that work below it turns out there's a conceptual error in the bitmask table --
 it thinks all inanimate objects are neuter.  Drop down to I6 and fix it.  There may be a cleaner
@@ -355,7 +249,7 @@ method, but this is the least invasive, unbelievably.]
 Include (-
 
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
-! Inclusive Gender Options replacement for Language.i6t: Pronouns
+! Gender Options replacement for Language.i6t: Pronouns
 ! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
 
 Array LanguagePronouns table
@@ -371,11 +265,11 @@ Array LanguagePronouns table
     'her'     	$$0100000001000000                    NULL
     'them'    	$$0001111100011111                    NULL;
 
--) instead of "Pronouns" in "Language.i6t".
+-) replacing "LanguagePronouns".
 
-Part 2A - Core i6 Parser Fix (for use without Original Parser by Ron Newcomb)
+Part - Core i6 Parser Fix (for use without Original Parser by Ron Newcomb)
 
-Chapter 1 - Revisions Not Made
+Chapter - Revisions Not Made
 
 [Oddly, it turns out we don't need to alter the Gender section of the parser, which defines GetGender and GetGNAOfObject.
 
@@ -403,23 +297,16 @@ To work with foreign languages which have gendered plurals, it would be necessar
 Summary: new code should not use GetGender or GetGNAOfObject, but we don't need to edit the old code.
 ]
 
-Chapter 2 - Pronoun Handling Revised
+Chapter - Pronoun Handling Revised
 
-[Most of this is the same as in the original.  
-However, PronounNotice is different, and GetGNABitfield is new.
+[The change to PronounNotice should actually work for all languages and new pronouns;
+but a new language or new pronouns would require a different GetGNABitfield implementation. ]
 
-The change to PronounNotice should actually work for all languages and new pronouns;
-but a new language would require a different GetGNABitfield implementation.
+Section - SetProunoun bugfix
 
-FWIW, ResetVagueWords and PronounNoticeHeldObjects are obsolete.
-SetPronoun is also obsolete, but we fix its runtime error number anyway.]
+[ SetPronoun is obsolete but we fix its runtime error number anyway, since it should be fixed ]
 
 Include (-
-
-! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
-! Inclusive Gender Options replacement for Parser.i6t: Pronoun Handling
-! ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
-
 [ SetPronoun dword value x;
     for (x=1 : x<=LanguagePronouns-->0 : x=x+3)
         if (LanguagePronouns-->x == dword) {
@@ -427,16 +314,17 @@ Include (-
         }
     RunTimeError(12);
 ];
+-) replacing "SetPronoun".
 
-[ PronounValue dword x;
-    for (x=1 : x<=LanguagePronouns-->0 : x=x+3)
-        if (LanguagePronouns-->x == dword)
-            return LanguagePronouns-->(x+2);
-    return 0;
-];
+Section - GetGNABitfield
 
-[ ResetVagueWords obj; PronounNotice(obj); ];
+[This is the primary logic change, allowing male, female, and neuter to be three separate bits, properly.]
 
+[This is harder than it should be because the (+ +) notation completely stopped working in Inform 10.
+Thankfully, we have named I6/Inter attributes for everything (from Definitions.i6t in the BasicInformKit).
+Some of the Inter translations are specified in Standard Rules; "male" is specified earlier in this file.]
+
+Include (-
 [ GetGNABitfield obj g gn;
 	! First calculate three-bit gender field
 	g = 0;
@@ -465,33 +353,46 @@ Include (-
 		}
 	return gn;	! shift 0];
 ];
+-)
 
+Section - PronounNotice
+
+[Replace GetGNAOfObject call with GetGNABitfield call.  This is the main hook.]
+
+Include (-
 [ PronounNotice obj x bm;
     if (obj == player) return;
 
-	bm = GetGNABitfield(obj);  ! This is the change made by Gender Options by Nathanael Nerode.
+    bm = GetGNABitfield(obj);  ! This is the change made by Gender Options by Nathanael Nerode.
 
     for (x=1 : x<=LanguagePronouns-->0 : x=x+3)
         if (bm & (LanguagePronouns-->(x+1)) ~= 0)
             LanguagePronouns-->(x+2) = obj;
 ];
+-) replacing "PronounNotice".
 
-[ PronounNoticeHeldObjects x;
-#IFNDEF MANUAL_PRONOUNS;
-  objectloop(x in player) PronounNotice(x);
-#ENDIF;
-  x = 0; ! To prevent a "not used" error
-  rfalse;
+Section - Unset pronouns from
+
+[Per default, if you are changing the gender of characters, it doesn't change any pronoun referents already set.  So if "him" is referring to Ned, and Ned stops being male, "him" will continue to refer to Ned until the player looks at another male character.  Under some circumstances, this satisfies "principle of least surprise" -- but under others it doesn't.  If you want to make sure that Ned is no longer referred to as him, "unset pronouns from Ned". ]
+
+Include (-
+[ PronounUnNotice obj x bm;
+    if (obj == player) return;
+
+    bm = GetGNABitfield(obj);
+    for (x=1 : x < (LanguagePronouns-->0 - 2) : x=x+3)
+        if ((bm & (LanguagePronouns-->(x+1)) == 0) && (LanguagePronouns-->(x+2) == obj))
+            LanguagePronouns-->(x+2) = NULL;
 ];
-
--) instead of "Pronoun Handling" in "Parser.i6t".
+-)
 
 to unset pronouns from (O - an object):
 	(- PronounUnNotice({O}); -)
 
-Part 2B - Original Parser Fix (for use with Original Parser by Ron Newcomb)
 
-Chapter 1 - Pronoun Handling Revised ( in place of Chapter - Pronoun Handling in Original Parser by Ron Newcomb )
+Part - Original Parser Fix (for use with Original Parser by Ron Newcomb)
+
+Chapter - Pronoun Handling Revised ( in place of Chapter - Pronoun Handling in Original Parser by Ron Newcomb )
 
 [Most of this is the same as in the original.  However, "To decide which word usage is the gender-animation usages for " is *completely* different.]
 
@@ -519,7 +420,7 @@ This is a super-tedious way of dealing with the translation between I7 and I6 wi
 The acronyms stand for:
 "Animate" or "Inanimate"
 "Singular" or "Plural"
-"Male", "Female", or "Neuter"
+"Male", "Female", "Neuter", or "nonBinary"
 ]
 To decide what word usage is
 	the empty bitfield:	(- $$000000000000 -).
@@ -604,7 +505,7 @@ To set pronouns from (obj - an object) (this is PronounNotice):
 		if the gender-animation element includes any of the gender-animation usages for the obj:
 			now chosen antecedent element is obj.
 
-Chapter 2 - English Pronoun Names For I7
+Chapter - English Pronoun Names For I7
 
 [This allows statements like "now 'he' is Alan".  Poorly tested.]
 
@@ -613,11 +514,15 @@ To decide what understood word is 'she': (- 'she' -).
 To decide what understood word is 'it': (- 'it' -).
 To decide what understood word is 'them': (- 'them' -).
 
-Volume 3 - English Language (for use with English Language by Graham Nelson)
+Volume - English Language (for use with English Language by Graham Nelson)
 
 [It proved necessary to replace practically the entire extension. Modal verbs and contractions and Grammatical definitions are unchanged.]
 
-Section 1 - Preferred Gender
+Section - Preferred Gender
+
+A grammatical gender is a kind of value. The grammatical genders are
+neuter gender, masculine gender, feminine gender.
+The neitherine gender is a grammatical gender.
 
 Prefer neuter gender is a truth state that varies.
 Prefer neuter gender is usually true.
@@ -625,8 +530,6 @@ The preferred animate gender is a grammatical gender which varies.
 The preferred animate gender is usually masculine gender.  [Matches old-fashioned English.]
 
 To decide which grammatical gender is the printing gender for (o - an object):
-	if the third singular pronoun of o is the singular-they-pronoun:
-		decide on neitherine gender;
 	[not male or female, always use "it"]
 	if o is not male and o is not female and o is not non-conforming:
 		decide on neuter gender;
@@ -646,10 +549,9 @@ To decide which grammatical gender is the printing gender for (o - an object):
 	if o is non-conforming:
 		decide on neitherine gender.
 
+Section - Viewpoint pronouns (in place of Section 2 - Saying pronouns in English Language by Graham Nelson)
 
-Section 2 - Viewpoint pronouns (in place of Section 2 - Saying pronouns in English Language by Graham Nelson)
 
-Special third person mode is a truth state that varies.
 
 Last person referenced is an object that varies. last person referenced is initially nothing.
 
@@ -661,14 +563,12 @@ Before printing the name of a person (called P):
 		now most recent reference of P is nominal;
 		now last person referenced is P;	
 		
-To say reset LPR:
+To reset LPR:
 	if not expanding text for comparison purposes:
 		now last person referenced is nothing;
 
-Definition: A narrative viewpoint is third person if it is third person singular or it is third person plural.
-
 To say we:
-	if the last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if the last person referenced is not the player and special third person mode is true:
 		say "[player]";
 	otherwise:
 		now the prior named object is the player;
@@ -687,7 +587,7 @@ To say we:
 			-- third person plural: say "they";
 
 To say we're:
-	if the last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if the last person referenced is not the player and special third person mode is true:
 		say "[player]'s";
 	otherwise:
 		now the prior named object is the player;
@@ -706,7 +606,7 @@ To say we're:
 			-- third person plural: say "they're";
 
 To say we've:	
-	if last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if last person referenced is not the player and special third person mode is true:
 		say "[player]'s";
 	otherwise:
 		now the prior named object is the player;
@@ -725,11 +625,10 @@ To say we've:
 			-- third person plural: say "they've";
 
 To say us:
-	if the last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if the last person referenced is not the player and special third person mode is true:
 		say "[player]";
 	otherwise:
 		now the prior named object is the player;
-		now the most recent reference of the prior named object is pronominal;
 		if the story viewpoint is:
 			-- first person singular: say "me";
 			-- second person singular: say "you";
@@ -744,11 +643,10 @@ To say us:
 			-- third person plural: say "them";
 
 To say ours:
-	if the last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if the last person referenced is not the player and special third person mode is true:
 		say "[player]'s";
 	otherwise:
 		now the prior named object is the player;
-		now the most recent reference of the prior named object is pronominal;
 		if the story viewpoint is:
 			-- first person singular: say "mine";
 			-- second person singular: say "yours";
@@ -764,7 +662,6 @@ To say ours:
 
 To say ourselves:
 	now the prior named object is the player;
-	now the most recent reference of the prior named object is pronominal;
 	if the story viewpoint is:
 		-- first person singular: say "myself";
 		-- second person singular: say "yourself";
@@ -779,11 +676,10 @@ To say ourselves:
 		-- third person plural: say "themselves";
 
 To say our:
-	if the last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if the last person referenced is not the player and special third person mode is true:
 		say "[player]'s";
 	otherwise:
 		now the prior named object is the player;
-		now the most recent reference of the prior named object is pronominal;
 		if the story viewpoint is:
 			-- first person singular: say "my";
 			-- second person singular: say "your";
@@ -798,7 +694,7 @@ To say our:
 			-- third person plural: say "their";
 
 To say We:	
-	if last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if last person referenced is not the player and special third person mode is true:
 		say "[player]";
 	otherwise:
 		now the prior named object is the player;
@@ -817,7 +713,7 @@ To say We:
 			-- third person plural: say "They";
 
 To say We're:	
-	if last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if last person referenced is not the player and special third person mode is true:
 		say "[player]'s";
 	otherwise:
 		now the prior named object is the player;
@@ -836,7 +732,7 @@ To say We're:
 			-- third person plural: say "They're";
 
 To say We've:	
-	if last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if last person referenced is not the player and special third person mode is true:
 		say "[player]'s";
 	otherwise:
 		now the prior named object is the player;
@@ -855,11 +751,10 @@ To say We've:
 			-- third person plural: say "They've";
 
 To say Us:
-	if the last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if the last person referenced is not the player and special third person mode is true:
 		say "[player]";
 	otherwise:
 		now the prior named object is the player;
-		now the most recent reference of the prior named object is pronominal;
 		if the story viewpoint is:
 			-- first person singular: say "Me";
 			-- second person singular: say "You";
@@ -874,11 +769,10 @@ To say Us:
 			-- third person plural: say "Them";
 
 To say Ours:
-	if the last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if the last person referenced is not the player and special third person mode is true:
 		say "[player]'s";
 	otherwise:
 		now the prior named object is the player;
-		now the most recent reference of the prior named object is pronominal;
 		if the story viewpoint is:
 			-- first person singular: say "Mine";
 			-- second person singular: say "Yours";
@@ -894,7 +788,6 @@ To say Ours:
 
 To say Ourselves:
 	now the prior named object is the player;
-	now the most recent reference of the prior named object is pronominal;
 	if the story viewpoint is:
 		-- first person singular: say "Myself";
 		-- second person singular: say "Yourself";
@@ -909,11 +802,10 @@ To say Ourselves:
 		-- third person plural: say "Themselves";
 
 To say Our:
-	if the last person referenced is not the player and story viewpoint is third person and Special third person mode is true:
+	if the last person referenced is not the player and special third person mode is true:
 		say "[player]'s";
 	otherwise:
 		now the prior named object is the player;
-		now the most recent reference of the prior named object is pronominal;
 		if the story viewpoint is:
 			-- first person singular: say "My";
 			-- second person singular: say "Your";
@@ -927,8 +819,7 @@ To say Our:
 			-- second person plural: say "Your";
 			-- third person plural: say "Their";
 
-
-Section 3 - Further pronouns (in place of Section 3 - Further pronouns in English Language by Graham Nelson)
+Section - Further pronouns (in place of Section 3 - Further pronouns in English Language by Graham Nelson)
 
 To say those:
 	say those in the accusative.
@@ -939,7 +830,7 @@ To say Those:
 To say those in (case - grammatical case):
 	if the case is nominative:
 		let the item be the prior named object;
-		now the most recent reference of the item is pronominal;
+		now the most recent reference of the prior named object is pronominal;
 		if the prior naming context is plural:
 			say "those";
 		otherwise if the item is the player:
@@ -952,7 +843,6 @@ To say those in (case - grammatical case):
 				-- the neitherine gender: say entry 1 in the declensions of the third singular pronoun of the player;
 	otherwise:
 		let the item be the prior named object;
-		now the most recent reference of the item is pronominal;
 		if the prior naming context is plural:
 			say "those";
 		otherwise if the item is the player:
@@ -967,7 +857,7 @@ To say those in (case - grammatical case):
 To say Those in (case - grammatical case):
 	if the case is nominative:
 		let the item be the prior named object;
-		now the most recent reference of the item is pronominal;
+		now the most recent reference of the prior named object is pronominal;
 		if the prior naming context is plural:
 			say "Those";
 		otherwise if the item is the player:
@@ -980,7 +870,6 @@ To say Those in (case - grammatical case):
 				-- the neitherine gender: say "[entry 1 in the declensions of the third singular pronoun of the item in title case]";
 	otherwise:
 		let the item be the prior named object;
-		now the most recent reference of the item is pronominal;
 		if the prior naming context is plural:
 			say "Those";
 		otherwise if the item is the player:
@@ -994,7 +883,7 @@ To say Those in (case - grammatical case):
 
 To say they:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "they";
 	otherwise if the item is the player:
@@ -1005,10 +894,10 @@ To say they:
 			-- the feminine gender: say "she";
 			-- the neuter gender: say "it";
 			-- the neitherine gender: say entry 1 in the declensions of the third singular pronoun of the item;
-
+ 
 To say They:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "They";
 	otherwise if the item is the player:
@@ -1022,7 +911,7 @@ To say They:
 
 To say their:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "their";
 	otherwise if the item is the player:
@@ -1036,7 +925,7 @@ To say their:
 
 To say Their:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "Their";
 	otherwise if the item is the player:
@@ -1050,7 +939,7 @@ To say Their:
 
 To say them:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "them";
 	otherwise if the item is the player:
@@ -1064,7 +953,7 @@ To say them:
 
 To say Them:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "Them";
 	otherwise if the item is the player:
@@ -1078,7 +967,7 @@ To say Them:
 
 To say theirs:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "theirs";
 	otherwise if the item is the player:
@@ -1092,7 +981,7 @@ To say theirs:
 
 To say Theirs:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "Theirs";
 	otherwise if the item is the player:
@@ -1106,7 +995,7 @@ To say Theirs:
 
 To say themselves:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "themselves";
 	otherwise if the item is the player:
@@ -1120,7 +1009,7 @@ To say themselves:
 
 To say Themselves:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "Themselves";
 	otherwise if the item is the player:
@@ -1130,14 +1019,14 @@ To say Themselves:
 			-- the masculine gender: say "Himself";
 			-- the feminine gender: say "Herself";
 			-- the neuter gender: say "Itself";
-			-- the neitherine gender: say "[entry 4 in the declensions of the third singular pronoun of the item in title case]";
+			-- the neitherine gender: say "[entry 24 in the declensions of the third singular pronoun of the item in title case]";
 
 [English Language used /they're/ to do "that's" which is counterintuitive, but preserved.
  /they/ /'re/ gives the expected behavior.
 ]
 To say they're:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "they";
 	otherwise if the item is the player:
@@ -1152,7 +1041,7 @@ To say they're:
 
 To say They're:
 	let the item be the prior named object;
-	now the most recent reference of the item is pronominal;
+	now the most recent reference of the prior named object is pronominal;
 	if the prior naming context is plural:
 		say "They";
 	otherwise if the item is the player:
@@ -1207,7 +1096,8 @@ To say Possessive:
 	otherwise:
 		say "[The item][apostrophe]s".
 
-Volume 5 - Compatibility with Plurality (for use with Plurality by Emily Short)
+
+Volume - Compatibility with Plurality (for use with Plurality by Emily Short)
 
 Section - Deleted (in place of Section 4 - Enumeration in Plurality by Emily Short)
 
@@ -1227,29 +1117,27 @@ Inclusive Gender Options ends here.
 
 ---- DOCUMENTATION ----
 
-Section 1 - Summary
+Section - Summary
 
-Inclusive Gender Options makes male, female, non-conforming/non-binary and neuter into independent on-off properties, each of which determines respectively whether "HE", "SHE", "THEY", or "IT" can be used to refer to the thing.  It makes "THEY" refer to any plural-named or ambiguously plural thing.  It also allows some authorial choices over which pronoun to print for things with multiple valid genders or numbers.  It should be just as fast and efficient as the standard rules.
+Gender Options makes male, female, non-conforming, and neuter into independent on-off properties, each of which determines respectively whether "HE", "SHE", "THEY", or "IT" can be used to refer to the thing.  It additionally makes "THEY" refer to any plural-named or ambiguously plural thing.  It also allows some authorial choices over which pronoun to print for things with multiple valid genders or numbers.  It should be just as fast and efficient as the standard rules.
 
-Additionally it adds the singular-they pronoun, declined properly, as in "Morgan pets the dog. Then they take the dog to the vet."
+I (Nathanael Nerode) have a taste for writing stuff with odd gender behavior, and so I decided to do this in a general-purpose manner.  There are several purposes most of which are shown in the Cinoty Park example.
 
-I (Nathanael Nerode) have a taste for writing stuff with odd gender behavior, and so I decided to do this in a general-purpose manner.  There are several purposes most of which are shown in the City Park example.
-
-Section 2 - Gender/Number Model and Pronouns
+Section - Gender/Number Model and Pronouns
 
 In the new model, male, female, non-conforming, and neuter are each separate properties, so that a thing is "male" or "not male", "female" or "not female", "non-conforming" or "not non-conforming", and "neuter" or "not neuter".  
 
 The gender is primarily for pronoun purposes. 
-When the player types "HIM", anything male will match.
-When the player types, "HER", anything female will match.
-When the player types, "THEM", anything non-conforming will match.
+When the player types "HE", anything male will match.
+When the player types, "SHE", anything female will match.
+When the player types "THEY", anything non-conforming will match. 
 When the player types "IT", anything neuter will match.  
 Something which is none of the four will never match any singular pronoun, which is not usually desirable, but may occasionally be useful (e.g. "The Exalted One shall not be referred to by pronouns!").
 
 If you define a "man" or "men", it will by default be male, and not female, non-conforming, or neuter.
 If you define a "woman" or "women", it will by default be female, and not male, non-conforming, or neuter.
-If you define a "non-binary" or "non-binaries", it will by default be non-conforming, and not male, female, or neuter.
-If you define a "person" or "people", it will by default be male, female, and non-conforming, but not neuter.  This makes more sense than it might at first appear; a person of unknown gender can be referred to as "he", "she". or "they" by the player.
+If you define a "nonbinary" or "nonbinaries", it will by default be non-conforming, and not male, female, or neuter.
+If you define a "person" or "people", it will by default be male, female, and non-conforming, but not neuter.  This makes more sense than it might at first appear; a person of unknown gender can be referred to as "he", "she", or "they" by the player.
 If you define a "thing" or an "animal", it will by default be neuter, and not male, female, or non-conforming.
 
 All of these can be overrriden and changed by specifying things like:
@@ -1262,14 +1150,13 @@ The parser will update and recognize the appropriate pronouns when used by the p
 
 A similarly flexible model is implemented for number.  Any object which is plural-named or ambiguously plural can be referred to as "THEY".  Any object which is ambiguously plural can additionally be referred to using the singular pronouns -- whichever ones apply according to its gender.
 
-So an amibguously plural, male, female, neuter thing can be referred to by any of the pronouns THEY, HE, SHE, IT.  Even if it's singular-named.
-
-	The jumble is an ambiguously plural, male, female, neuter thing.  
+So an ambiguously plural, male, female, non-conforming, neuter thing can be referred to by any of the pronouns THEY, HE, SHE, IT.  Even if it's singular-named.
+	The jumble is an ambiguously plural, male, female, non-conforming, neuter thing.  
 	The description of the jumble is "Things and people, all in a jumble! [They] [are] quite something."
 
-The concept of "ambiguously plural" items is present in the Standard Rules but is not fully implemented.  (A singular-named ambiguously plural item will not match "they" in the Standard Rules.  It will match with Inclusive Gender Options active.)
+The concept of "ambiguously plural" items is present in the Standard Rules but is not fully implemented.  (A singular-named ambiguously plural item will not match "they" in the Standard Rules.  It will match with Gender Options active.)
 
-Section 3 - Advice on the gender model
+Section - Advice on the gender model
 
 This is designed to be a plug-in extension which requires no change in existing code and keeps the same behavior if you have been using "man", "woman", or "animal".  If you have been using "person" to refer to generic non-gendered people and using "ambiguously plural" appropriately, this should simply improve the pronoun behavior with no code changes necessary.   But there may be some changes required if you have been using explicit gender adjectives.
 
@@ -1277,8 +1164,9 @@ This is because now male, female, non-conforming, and neuter are entirely separa
 	Tracy is a person.
 	Tracy is male.
 	
-Because the default for "person" is both male and female, responding to "him" and "her", this makes Tracy both male and female; the "male" adjective does nothing.  If you want to make Tracy a man (male and not female), you would have to do this:
+Because the default for "person" is male, female, and non-conforming, responding to "him", "her", and "them", this makes Tracy male, female, and non-conforming; the "male" adjective does nothing.  If you want to make Tracy a man (male and not female or non-conforming), you would have to do this:
 	Now Tracy is not female.
+	Now Tracy is non non-conforming.
 
 Now suppose you want to change Tracy from a man to a woman (female and not male).  You'll have to make two statements:
 	Now Tracy is female.
@@ -1295,7 +1183,13 @@ Similarly, if you make an animal female, the player can refer to the animal as b
 	
 This is usually desirable.
 
-Section 4 - Gender in output messages
+Section - Unsetting pronouns
+
+By default, if you are changing the gender of characters, it doesn't change any pronoun referents already set by the player.  So if "him" is currently referring to Alex, and Alex stops being male, "him" will continue to refer to Alex until the player looks at another male character.  Under some circumstances, this satisfies "principle of least surprise" -- but under others it doesn't.  If you want to make sure that Alex can not be referenced as him:
+
+	unset pronouns from Alex
+
+Section - Gender in output messages
 
 Gender and number is used for a second purpose other than recognizing pronouns in the English Language extension, and we must fix this up too.
 It shows up in message substitutions such as [those].
@@ -1311,19 +1205,19 @@ If you would rather have "she" printed, use this:
 
 	The preferred animate gender is a grammatical gender which varies.
 	The preferred animate gender is usually the masculine gender.
-If you have an androgynous person (both male and female, but not neuter), this will print "him".
+If you have person who identifies as both male and female, this will print "him".
 If you would rather have "her" printed, use this:
 	The preferred animate gender is the feminine gender.
 	
-Prefer neuter gender is checked first; if it is false, then the preferred animate gender is checked.  An object will never be printed with a pronoun which isn't valid for it, unless it is not male, not female, not non-conforming, *and* not neuter -- not responding to any pronouns from the player -- in which case "it" will be used.
+Prefer neuter gender is checked first; if it is false, then the preferred animate gender is checked.  An object will never be printed with a pronoun which isn't valid for it, unless it is not male, not female, *and* not neuter -- not responding to any pronouns from the player -- in which case "it" will be used.
 
-Note that these use values of a different kind from the genders of objects for parsing purposes; the phrase "masculine gender", "feminine gender", "neitherine gender" (for non-conforming persons), and "neuter gender" must be specifically used.
+Note that these use values of a different kind from the genders of objects for parsing purposes; the phrase "masculine gender", "feminine gender", and "neuter gender" must be specifically used.
 
 This is all implemented with the following decide phrase.  If you don't like these rules and want to do something even more complicated (perhaps a per-object choice), override the decide phrase.
 
 	To decide which grammatical gender is the printing gender for (o - an object):
 
-Section 5 - Number in output messages
+Section - Number in output messages
 
 Ambiguously plural items (like "pair of shoes") will be treated as plural or singular by output messages depending on whether they are "plural-named" or "singular-named"  This is standard behavior.  This does not affect the ability to refer to them by pronouns (you can always use both "they" and the singular pronouns for their gender).
 
@@ -1331,22 +1225,7 @@ The plural-named property is also used for the items like "the trees" which are 
 
 Please note that for a thing which is ambiguously plural but singular-named, such as "pair of dice", the substitution "[they're]" will produce "that's", while "[they]['re]" will produce "it's".  Choose wisely!
 
-Section 6 - Special third person mode
-
-One problem with a third person singular story viewpoint is that everything is printed in terms of "they". An anonymous "they" doesn't work as well as an anonymous "you" or "I". Special third person mode causes the first consecutive use of a first person plural text substitution ("[we]", "[us]", etc.) to generate the name of yourself instead of a pronoun. You probably will want to give the player a name:
-	
-	Rule for printing the name of the player:
-		say "Abraham Lincoln";
-		
-Section 7 - The Singular They
-
-Many individuals who identify as non-conforming, non-binary, or a similar term prefer "they/them" pronouns. This is at first glance simple in Inform -- just declare a non-conforming character to be plural! This neglects the idiosyncratic conjugation of verbs when using the singular they:
-	
-	Morgan pets the dog. Then they take the dog to the vet.
-	
-Inclusive Gender Options takes care of this behavior. 
-
-Section 8 - Printing differences from standard behavior
+Section - Printing differences from standard behavior
 
 For reference, this is the procedure currently used in the Standard Rules as of the time of writing:
 
@@ -1355,14 +1234,14 @@ For reference, this is the procedure currently used in the Standard Rules as of 
 	Otherwise, neuter form ("it") is used.
 
 	For people (including animals)
-	If person is the player, "you" is used.
+	If person is the player, the pronoun appropriate to the story viewpoint is used.
 	If person is plural, plural form ("they") is used.
 	Otherwise, if person is female, female form ("her") is used.
-	Otherwise, if person is non-conforming, non-conforming form ("they") is used.
+	Otherwise, if person is non-conforming, non-conforming form ("them") is used.
 	Otherwise, if person is neuter, neuter form ("it") is used.
 	Otherwise, male form ("him") is used.
 
-In contrast, this is the procedure in Emily Short's Plurality:
+In contrast, this was the procedure in Emily Short's Plurality:
 
 	If the thing/person is plural, plural form ("they") is used.
 	Otherwise, if the thing/person is the player, "you" is used.
@@ -1370,43 +1249,70 @@ In contrast, this is the procedure in Emily Short's Plurality:
 	Otherwise, if the thing/person is male, male form ("he") is used.
 	Otherwise, if the thing/person is female, female form ("she") is used.
 
-Changing the gender model causes these to be two different procedures, which is why I wrote an entirely new and more versatile procedure.
+Changing the gender model causes these to be two different procedures, which is why I (Nathanael Nerode) wrote an entirely new and more versatile procedure.
 
-Section 9 - Interaction with Other Extensions
+Section - Miscellaneous Changes
 
-Inclusive Gender Options replaces parts of Standard Rules by Graham Nelson and should be included after it.
-Inclusive Gender Options replaces most of English Language by Graham Nelson and should be included after it.
+In Standard Rules, a person is always transparent -- their contents can be seen and interacted with.
+This is perfectly reasonable as a baseline but can be restrictive for some story authors, so instead,
+with this extension, a person is usually transparent.  Which changes nothing unless you as the story
+author decide to create a non-transparent person.
 
-Inclusive Gender Options is compatible with Neutral Standard Responses by Nathanael Nerode.
-Inclusive Gender Options is incompatible with Neutral Library Messages by Aaron Reed, which predates the "reponses" system.  Neutral Standard Responses is intended as a replacement.
+Section - Interaction with Other Extensions
 
-Inclusive Gender Options includes fixes for the gender handling in Original Parser by Ron Newcomb.  However, Original Parser is broken on the current version of Inform, so don't use it.  As a result this is untested and Inclusive Gender Options probably doesn't work as well with Original Parser as it does with the standard parser.
+[Good for version Gender Options 4.0.220530 -- needs to be verified for Inclusive Gender Options]
 
-Inclusive Gender Options is compatible with Plurality by Emily Short in that it is safe to include both.  But they will probably not interact well due to conflicting gender assumptions.  Plurality is largely obsolete due to incorporation of most of its features in the Standard Rules as of Inform 6M62; please use the Standard Rules features in preference to the features in Plurality.
+Gender Options replaces parts of Standard Rules by Graham Nelson and should be included after it.
+Gender Options replaces most of English Language by Graham Nelson and should be included after it.
 
-Inclusive Gender Options is incompatible with Second Gender by Felix Larsson.  The two do very similar things, but IMO (Nerode) Gender Options does so in a cleaner and more comprehensive fashion.  It was developed completely independently.
+Gender Options is compatible with Neutral Standard Responses by Nathanael Nerode.
+Gender Options is incompatible with Neutral Library Messages by Aaron Reed, which predates the "responses" system.  Neutral Standard Responses is intended as a replacement.
 
-Section 10 - Changelog
+Gender Options includes fixes for the gender handling in Original Parser by Ron Newcomb.  However, Original Parser is broken on the current version of Inform, so don't use it.  As a result this is untested and Gender Options probably doesn't work as well with Original Parser as it does with the standard parser.  I have retained this code in hopes of reviving Original Parser some day.
 
-Version 4/000000 - Renamed Inclusive Gender Options, updated to include non-conforming "gender" and the singular they.
-Version 3/210331 - Fix example / testsuite.
-Version 3/170818 - Small documentation and comment tweaks.
-Version 3/170816 - Replaced "always" with "usually" for man and woman.  Eliminated implications which didn't work.  Mboved "person is usually not neuter" into correct section.  Removed androgyne kind and collective noun property for efficiency (they were syntactic sugar).  Revised documentation, comments, and City Park exmaple.  Added "It for All" example.
-Version 2/170815 - First public release for gamma testing.
+Gender Options is compatible with Plurality by Emily Short in that it is safe to include both.  But they will probably not interact well due to conflicting gender assumptions.  Plurality is largely obsolete due to incorporation of most of its features in the Standard Rules as of Inform 6M62; please use the Standard Rules features in preference to the features in Plurality.
 
-Example: * City Park 
+Gender Options is incompatible with Second Gender by Felix Larsson.  The two do very similar things, but IMO Gender Options does so in a cleaner and more comprehensive fashion.  It was developed completely independently.
 
-This consists of a room with items featuring most of the combinations of gender and number options which seemed plausible.  Take special note of the toy ship (you can call it "she").  This is also the test suite for the extension.
+Section - Changelog
 
-	*: "Everyone Comes To City Park" by Nathanael Nerode
+Inclusive Gender Options by Philip Riley:
+	4.1 - Added the non-conforming gender, nonbinary person, and the singular they pronoun. 
 	
-	The release number is 3. [Third released version of this test suite]
+Gender Options by Nathanael Nerode:
+	4.0.220530 - Section number removal in documentation to accommodate automatic section numbering
+	4.0.220529 - Example fixes to accommodate automated testing of examples
+	4.0.220527 - Example fixes to accommodate automated testing of examples
+	4.0.220524 - Format Changelog!
+	4.0.220523 - Eliminate now-unnecessary dummy variable.
+	4.0.220521 - Update for Inform v10.1.0, which restructured Standard Rules and the I6T code and the method of replacing I6T code.
+	- Implement "unset pronouns from" in order to solve an issue noted on the forum without restricting options.
+	- Many whitespace fixes.
+	- New example game.
+	- Make opaque persons possible.
+	- Apply my Style Guide principles -- don't number the headings!
+	3/210331 - Fix example / testsuite.
+	3/170818 - Small documentation and comment tweaks.
+	3/170816 - Replaced "always" with "usually" for man and woman.
+	- Eliminated implications which didn't work.
+	- Moved "person is usually not neuter" into correct section.
+	- Removed androgyne kind and collective noun property for efficiency (they were syntactic sugar).
+	- Revised documentation, comments, and City Park exmaple.  Added "It for All" example.
+	2/170815 - First public release for gamma testing.
+
+Example: * City Park - This consists of a room with items featuring most of the combinations of gender and number options which seemed plausible.  Take special note of the toy ship (you can call it "she").  This is also the test suite for the extension.
+
+	*: "Everyone Comes To City Park"
+
+	Include Inclusive Gender Options by Philip Riley.
+	The release number is 5. [Fifth released version of this test suite]
 	Include Gender Options by Nathanael Nerode.
 	City Park is a room.
 	The description of City Park is "Everyone comes to City Park!"
 	
 	The shadow is a person in the park.  "Someone skulks in the shadow."
 	Understand "skulker" as the shadow.
+	Understand "someone" as the shadow.
 	The description of the shadow is "[We] [can't get] a good look at [regarding the shadow][them]."
 	The shadow is neuter.
 	
@@ -1417,6 +1323,10 @@ This consists of a room with items featuring most of the combinations of gender 
 	Jane is a woman in the park.
 	The description of Jane is "Jane is an elegant woman."
 	Understand "elegant woman" as Jane.
+	
+	November is a nonbinary in the park.
+	The description of November is "November is a striking person."
+	Understand "striking person" as November.
 	
 	A deity is a person in the park.
 	Understand "Hermaphroditus" as deity.
@@ -1440,6 +1350,7 @@ This consists of a room with items featuring most of the combinations of gender 
 	Description of the sunbathers is "A mixed-gender group is out bathing in the sun."
 	Sunbathers are male.
 	Sunbathers are female.
+	Sunbathers are non-conforming.
 	Sunbathers are ambiguously plural.
 	Sunbathers are plural-named.
 	Sunbathers are not proper-named.
@@ -1519,27 +1430,25 @@ This consists of a room with items featuring most of the combinations of gender 
 	Carry out setting neuter default:
 		now prefer neuter gender is true.
 	
-	test pronouns with "pronouns / x john / pronouns / x jane / pronouns / x deity / pronouns / x girls / pronouns / x boys / pronouns / x sunbathers / pronouns / x does / pronouns / x buck  / pronouns  / x dice / pronouns / x ship / pronouns / x unpronounable one / pronouns / x jumble / pronouns"  in City Park.
+	test pronouns with "pronouns / x john / pronouns / x jane / pronouns / x november / pronouns/ x deity / pronouns / x girls / pronouns / x boys / pronouns / x sunbathers / pronouns / x does / pronouns / x buck  / pronouns  / x dice / pronouns / x ship / pronouns / x unpronounable one / pronouns / x jumble / pronouns"  in City Park.
 	
 	test gender with "anthropomorphize / gender buck / gender puppy / gender shadow / objectify / gender buck / gender puppy / gender shadow / anthropomorphize / matriarchy / gender deity  / gender shadow  / x shadow / patriarchy / gender deity / gender shadow / x shadow" in City Park.
 	
 	test number with "gender girls / gender boys / gender sunbathers / gender dice" in City Park.
-	
-Example: ** It for All
 
-Some authors have requested that "it" apply to anything, plural or singular, of any gender, for the convenience of their players.
+Example: ** It for All - Some authors have requested that "it" apply to anything, plural or singular, of any gender, for the convenience of their players.
 
-	"It for All"
+	*: "It for All"
+
+	Include Inclusive Gender Options by Philip Riley.
 	
-	Include Gender Options by Nathanael Nerode.
-	
-	A person is neuter. A man is neuter.  A woman is neuter.  [Overrides "usually not neuter", makes people respond to IT]
+	A person is neuter. A man is neuter.  A woman is neuter.  A nonbinary is neuter. [Overrides "usually not neuter", makes people respond to IT]
 	A plural-named thing is ambiguously plural. [Makes all plural-named objects respond to IT]
 	Prefer neuter gender is false. [Printed text shouldn't refer to characters as "it" if they're male or female.]
 	
 	Marching Grounds is a room.  "The place for marching!"
 	
-	to march is a verb. to watch is a verb.
+	to march is a verb. to watch is a verb. to command is a verb.
 	
 	The soldiers are plural-named men in Marching Grounds. 
 	The description of the soldiers is "[Regarding the soldiers][They] [march] up and down."
@@ -1547,5 +1456,72 @@ Some authors have requested that "it" apply to anything, plural or singular, of 
 	An observer is a improper-named woman in Marching Grounds.
 	The description of the observer is "[Regarding the observer][They] [watch] the soldiers."
 	
-	test pronouns with "x soldiers / pronouns / x observer / pronouns".
+	A commander is a improper-named nonbinary in Marching Grounds.
+	The description of the commander is "[Regarding the observer][They] [command] the soldiers."
+	
+	test pronouns with "x soldiers / pronouns / x observer / pronouns / x commander / pronouns".
+
+Example: * No0neman's Test - No0neman wanted to make sure that Alex would no longer be able to be referred to by the old gender, not even for a little while.
+
+	*: "No0neman's Test"
+
+	Include Inclusive Gender Options by Philip Riley.
+
+	The starting room is a room.
+
+	The player is in the starting room. The player is not female. The player is not non-conforming. The player is not neuter.
+
+	Alex is a person. Alex is not male. Alex is not female. Alex is not non-conforming.
+
+	Alex is in the starting room.
+
+	Feminizing is an action applying to one thing.
+
+	Masculinizing is an action applying to one thing.
+
+	Ungendering is an action applying to one thing.
+
+	Neuterizing is an action applying to one thing.	
+
+	Understand "feminize [person]" as feminizing.
+
+	Understand "masculinize [person]" as masculinizing.
+
+	Understand "ungender [person]" as ungendering.
+
+	Understand "neuter [person]" as neuterizing.
+
+	Carry out feminizing:
+		now the noun is not neuter;
+		now the noun is not male;
+		now the noun is not non-conforming;
+		now the noun is female;
+		set pronouns from the noun;
+		unset pronouns from the noun;
+
+	Carry out masculinizing:
+		now the noun is not neuter;
+		now the noun is not female;
+		now the noun is not non-conforming;
+		now the noun is male;
+		set pronouns from the noun;
+		unset pronouns from the noun;
+
+	Carry out ungendering:
+		now the noun is not neuter;
+		now the noun is not female;
+		now the noun is non-conforming;
+		set pronouns from the noun;
+		unset pronouns from the noun;
+
+	Carry out neuterizing:
+		now the noun is neuter;
+		now the noun is not female;
+		now the noun is not male;
+		now the noun is not non-conforming;
+		set pronouns from the noun;
+		unset pronouns from the noun;
+
+	test unsetting with "masculinize alex / x him / x her / x them / x it / feminize alex / x him / x her / x them / x it / ungender alex / x him / x her / x them / x it"
+	
 	
