@@ -147,7 +147,10 @@ Include (-
 	if (o has singular_they) {
 		total++;
 	}
-	return false;
+	if (total > 1) {
+		rtrue;
+	}
+	rfalse;
 ];
 
 [ PreferredPronoun o;
@@ -170,17 +173,7 @@ Include (-
 		}
 		return it_pronoun;
 	}
-	if (o has male) {
-		return he_pronoun;
-	}
-	if (o has female) {
-		return she_pronoun;
-	}
-	if (o has singular_they) {
-		print "foo";
-		return singular_they_pronoun;
-	}
-	return it_pronoun;
+	return o.third_singular_pronoun;
 ];
 
 [ PNToVP ; ! gna;
@@ -1387,8 +1380,7 @@ Example: * City Park - This consists of a room with items featuring most of the 
 	*: "Everyone Comes To City Park"
 
 	Include Inclusive Gender Options by Philip Riley.
-	The release number is 5. [Fifth released version of this test suite]
-	Include Gender Options by Nathanael Nerode.
+	The release number is 6. [Sixth released version of this test suite]
 	City Park is a room.
 	The description of City Park is "Everyone comes to City Park!"
 	
@@ -1676,5 +1668,26 @@ Example: * The Third Person - Testing special third person mode
 		now the third singular pronoun of the player is the it-pronoun;
 
 	test me with "eat chocolate / feminize / eat chocolate / ungender / eat chocolate / neuter / eat chocolate / masculinize / eat chocolate".
+	
+[The following example will produce correct text when using custom pronouns, but it cannot recognize a custom pronoun when typed by the player, and cannot set pronouns correctly. Therefore I'm commenting it out for the time-being.]
+
+[Example: * Zie/Hir - Testing custom pronouns
+
+	*: "Zie/Hir"
+
+	Include Inclusive Gender Options by Philip Riley.
+
+	The starting room is a room.
+
+	Andy is a nonbinary in the starting room.
+	Zie-pronoun is a pronoun.
+	The grammatical-person of zie-pronoun is 3.
+	The declensions of zie-pronoun are { "zie", "hir", "hirs", "hirself", "hir" }.
+	The third singular pronoun of Andy is the zie-pronoun.
+
+	Instead of jumping:
+		say "[Andy] [like] to jump as well. [They] [say] it makes [them] feel happy.";
+	
+	Test me with "jump / pronouns";]
 
 	
