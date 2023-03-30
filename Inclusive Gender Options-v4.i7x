@@ -1,6 +1,6 @@
-Version 4.1.230326 of Inclusive Gender Options by Philip Riley begins here.
+Version 4.1.230330 of Inclusive Gender Options by Philip Riley begins here.
 
-"More broad-minded English language gender/number model where male, female, non-conforming, and neuter are four separate true-false properties.  Allows for objects to respond to any specified combination of HE, SHE, IT, and THEY.  As fast as the Standard Rules.  Tested with Inform v10.1.0."
+"More broad-minded English language gender/number model where male, female, singular-they, and neuter are four separate true-false properties.  Allows for objects to respond to any specified combination of HE, SHE, IT, and THEY.  As fast as the Standard Rules.  Tested with Inform v10.1.0."
 
 [We replace very, very specific bits of the standard rules. This is based on Inform v10.1.0]
 
@@ -8,7 +8,7 @@ Include Standard Rules by Graham Nelson.
 
 Volume - Enhanced Gender and Number Model
 
-[Make male, female, and neuter independent.]
+[Make male, female, singular-they and neuter independent.]
 
 Chapter - Replace Standard Rules Elements Always
 
@@ -18,12 +18,12 @@ Section 11 - People and things with gender (in place of Section 11 - People in S
 A thing can be neuter.  A thing is usually neuter.
 A thing can be male.  A thing is usually not male.
 A thing can be female.  A thing is usually not female.
-A thing can be non-conforming. A thing is usually not non-conforming.
+A thing can be singular-they. A thing is usually not singular-they.
 
-The non-conforming property translates into I6 as "non_conforming".
+The singular-they property translates into I6 as "singular_they".
 
 Include (-
-Attribute non_conforming;
+Attribute singular_they;
 -)
 
 
@@ -57,7 +57,7 @@ A person is usually not neuter.
 
 A person is usually female.
 A person is usually male.
-A person is usually non-conforming.
+A person is usually singular-they.
 [* This is less weird than it appears.  If you make a generic, unnamed person, the player can refer to said person as "him" or "her", interchangably.]
 
 Section 12 - Animals, men and women revised (in place of Section 12 - Animals, men and women in Standard Rules by Graham Nelson)
@@ -69,18 +69,18 @@ The specification of man is "Represents a man or boy."
 A man is usually male.
 A man is usually not female.
 A man is usually not neuter.
-A man is usually not non-conforming.
+A man is usually not singular-they.
 
 A woman is a kind of person.
 The specification of woman is "Represents a woman or girl."
 A woman is usually female.
 A woman is usually not male.
 A woman is usually not neuter.
-A woman is usually not non-conforming.
+A woman is usually not singular-they.
 
 A nonbinary is a kind of person.
 The specification of nonbinary is "Represents a person who identifies as a gender other than male or female."
-A nonbinary is usually non-conforming.
+A nonbinary is usually singular-they.
 A nonbinary is usually not male.
 A nonbinary is usually not female.
 A nonbinary is usually not neuter.
@@ -89,7 +89,7 @@ An animal is a kind of person.
 An animal is usually not male.
 An animal is usually not female.
 An animal is usually neuter.
-An animal is usually not non-conforming.
+An animal is usually not singular-they.
 [By default, refer to an animal as "it".]
 
 The specification of animal is "Represents an animal, or at any rate a
@@ -136,11 +136,68 @@ Special third person mode is a truth state that varies.
 
 Include (-
 
+[ MultiGender o total;
+	total = 0;
+	if (o has male) {
+		total++;
+	}
+	if (o has female) {
+		total++;
+	}
+	if (o has singular_they) {
+		total++;
+	}
+	return false;
+];
+
+[ PreferredPronoun o;
+	if (o has pluralname) return they_pronoun;
+	if (o hasnt male && o hasnt female && o hasnt singular_they) {
+		return it_pronoun;
+	}
+	if (o has neuter && (+ prefer neuter gender +)) {
+		return it_pronoun;
+	}
+	if (MultiGender(o)) {
+		if (+ preferred animate gender +) == male {
+			return he_pronoun;
+		}
+		if (+ preferred animate gender +) == female {
+			return she_pronoun;
+		}
+		if (+ preferred animate gender +) == singular_they {
+			return singular_they_pronoun;
+		}
+		return it_pronoun;
+	}
+	if (o has male) {
+		return he_pronoun;
+	}
+	if (o has female) {
+		return she_pronoun;
+	}
+	if (o has singular_they) {
+		print "foo";
+		return singular_they_pronoun;
+	}
+	return it_pronoun;
+];
+
 [ PNToVP ; ! gna;
+    if (prior_named_noun == player) {
+	if (story_viewpoint ~= 3) {
+		return story_viewpoint;
+	}
+	if (player.most_recent_reference == (+ pronominal +)) {
+		if (player.third_singular_pronoun has pluralname) return 6;
+		return 3;
+	}
+	return 3;
+    }
     if (prior_named_list >= 2) return 6;
     if (prior_named_noun) {
       if ((prior_named_noun provides most_recent_reference) && prior_named_noun.most_recent_reference  == (+ pronominal +)) {
-        if (prior_named_noun.third_singular_pronoun && prior_named_noun.third_singular_pronoun has pluralname) return 6;
+        if (PreferredPronoun(prior_named_noun) has pluralname) return 6;
         return 3;
       }
       if (prior_named_noun has pluralname) return 6;
@@ -188,17 +245,21 @@ It-pronoun is a pronoun.
 It-pronoun is neuter.
 The grammatical-person of it-pronoun is 3.
 The declensions of it-pronoun are { "it", "it", "its", "itself", "its" }.
+The it-pronoun object translates into i6 as "it_pronoun".
 
 He-pronoun is a pronoun.
 The grammatical-person of he-pronoun is 3.
 The declensions of he-pronoun are { "he", "him", "his", "himself", "his" }.
+The he-pronoun object translates into i6 as "he_pronoun".
 
 She-pronoun is a pronoun.
 The grammatical-person of she-pronoun is 3.
 The declensions of she-pronoun are { "she", "her", "hers", "herself", "her" }.
+The she-pronoun object translates into i6 as "she_pronoun".
 
 Singular-you-pronoun is a pronoun.
 The grammatical-person of singular-you-pronoun is 2.
+Singular-you-pronoun is plural-named.
 The declensions of singular-you-pronoun are { "you", "you", "yours", "yourself", "your" }.
 
 Plural-you-pronoun is a pronoun.
@@ -210,11 +271,13 @@ They-pronoun is a pronoun.
 The grammatical-person of they-pronoun is 3.
 They-pronoun is plural-named.
 The declensions of They-pronoun are { "they", "them", "theirs", "themselves", "their" }.
+The they-pronoun object translates into i6 as "they_pronoun".
 
 Singular-they-pronoun is a pronoun.
 The grammatical-person of singular-they-pronoun is 3.
 Singular-they-pronoun is plural-named.
 The declensions of singular-they-pronoun are { "they", "them", "theirs", "themself", "their" }.
+The singular-they-pronoun object translates into i6 as "singular_they_pronoun".
 
 An object has a pronoun called the third singular pronoun.
 The third singular pronoun property translates into i6 as "third_singular_pronoun".
@@ -236,6 +299,7 @@ The third singular pronoun of a person is usually singular-they-pronoun.
 [ These are defaults and can be over-ridden as desired ]
 The third singular pronoun of a man is usually he-pronoun.
 The third singular pronoun of a woman is usually she-pronoun.
+The third singular pronoun of an animal is usually it-pronoun.
 
 
 Part - Universal Fix
@@ -302,7 +366,7 @@ Chapter - Pronoun Handling Revised
 [The change to PronounNotice should actually work for all languages and new pronouns;
 but a new language or new pronouns would require a different GetGNABitfield implementation. ]
 
-Section - SetProunoun bugfix
+Section - SetPronoun bugfix
 
 [ SetPronoun is obsolete but we fix its runtime error number anyway, since it should be fixed ]
 
@@ -337,7 +401,7 @@ Include (-
 	if ( obj has male ) {
 		g = g + 8;	! bit position 2
 		}
-	if ( obj has non_conforming ) {
+	if ( obj has singular_they ) {
 		g = g + 1;	! bit position 3
 		}
 	gn = 0;
@@ -380,7 +444,7 @@ Include (-
     if (obj == player) return;
 
     bm = GetGNABitfield(obj);
-    for (x=1 : x < (LanguagePronouns-->0 - 2) : x=x+3)
+    for (x=1 : x < (LanguagePronouns-->0 - 1) : x=x+3)
         if ((bm & (LanguagePronouns-->(x+1)) == 0) && (LanguagePronouns-->(x+2) == obj))
             LanguagePronouns-->(x+2) = NULL;
 ];
@@ -475,23 +539,23 @@ To decide which word usage is the gender-animation usages for (obj - object):
 		if obj is singular-named or obj is ambiguously plural:
 			if obj is male, include _a_s_m in GNAbits;
 			if obj is female, include _a_s_f in GNAbits;
-			if obj is non-conforming, include _a_s_b in GNAbits;
+			if obj is singular-they, include _a_s_b in GNAbits;
 			if obj is neuter, include _a_s_n in GNAbits;
 		if obj is plural-named or obj is ambiguously plural:
 			if obj is male, include _a_p_m in GNAbits;
 			if obj is female, include _a_p_f in GNAbits;
-			if obj is non-conforming, include _a_p_b in GNAbits;
+			if obj is singular-they, include _a_p_b in GNAbits;
 			if obj is neuter, include _a_p_n in GNAbits;
 	otherwise:
 		if obj is singular-named or obj is ambiguously plural:
 			if obj is male, include _i_s_m in GNAbits;
 			if obj is female, include _i_s_f in GNAbits;
-			if obj is non-conforming, include _i_s_b in GNAbits;
+			if obj is singular-they, include _i_s_b in GNAbits;
 			if obj is neuter, include _i_s_n in GNAbits;
 		if obj is plural-named or obj is ambiguously plural:
 			if obj is male, include _i_p_m in GNAbits;
 			if obj is female, include _i_p_f in GNAbits;
-			if obj is non-conforming, include _i_p_b in GNAbits;
+			if obj is singular-they, include _i_p_b in GNAbits;
 			if obj is neuter, include _i_p_n in GNAbits;
 	decide on GNAbits.
 	
@@ -529,15 +593,23 @@ Prefer neuter gender is usually true.
 The preferred animate gender is a grammatical gender which varies.
 The preferred animate gender is usually masculine gender.  [Matches old-fashioned English.]
 
+Definition: A thing is multi-gendered:
+	let total be 0;
+	if it is male, increment total;
+	if it is female, increment total;
+	if it is singular-they, increment total;
+	if total > 1, yes;
+	no;
+
 To decide which grammatical gender is the printing gender for (o - an object):
 	[not male or female, always use "it"]
-	if o is not male and o is not female and o is not non-conforming:
+	if o is not male and o is not female and o is not singular-they:
 		decide on neuter gender;
 	[neuter and prefer neuter gender, always use "it"]
 	if o is neuter and prefer neuter gender is true:
 		decide on neuter gender;
 	[female and male, use preferred animate gender]
-	if o is female and o is male:
+	if o is multi-gendered:
 		decide on preferred animate gender;
 	[classic male; and non-neuter or male overrrides neuter]
 	if o is male:
@@ -545,8 +617,8 @@ To decide which grammatical gender is the printing gender for (o - an object):
 	[classic female; and non-neuter or female overrrides neuter]
 	if o is female:
 		decide on feminine gender;
-	[classic non-conforming; and non-neuter or non-conforming overrrides neuter]
-	if o is non-conforming:
+	[classic singular-they; and non-neuter or singular-they overrrides neuter]
+	if o is singular-they:
 		decide on neitherine gender.
 
 Section - Viewpoint pronouns (in place of Section 2 - Saying pronouns in English Language by Graham Nelson)
@@ -581,7 +653,7 @@ To say we:
 					-- the masculine gender: say "he";
 					-- the feminine gender: say "she";
 					-- the neuter gender: say "it";
-					-- the neitherine gender: say entry 1 in the declensions of the third singular pronoun of the player;;
+					-- the neitherine gender: say entry 1 in the declensions of the third singular pronoun of the player;
 			-- first person plural: say "we";
 			-- second person plural: say "you";
 			-- third person plural: say "they";
@@ -1119,39 +1191,39 @@ Inclusive Gender Options ends here.
 
 Section - Summary
 
-Gender Options makes male, female, non-conforming, and neuter into independent on-off properties, each of which determines respectively whether "HE", "SHE", "THEY", or "IT" can be used to refer to the thing.  It additionally makes "THEY" refer to any plural-named or ambiguously plural thing.  It also allows some authorial choices over which pronoun to print for things with multiple valid genders or numbers.  It should be just as fast and efficient as the standard rules.
+Gender Options makes male, female, singular-they, and neuter into independent on-off properties, each of which determines respectively whether "HE", "SHE", "THEY", or "IT" can be used to refer to the thing.  It additionally makes "THEY" refer to any plural-named or ambiguously plural thing.  It also allows some authorial choices over which pronoun to print for things with multiple valid genders or numbers.  It should be just as fast and efficient as the standard rules.
 
 I (Nathanael Nerode) have a taste for writing stuff with odd gender behavior, and so I decided to do this in a general-purpose manner.  There are several purposes most of which are shown in the Cinoty Park example.
 
 Section - Gender/Number Model and Pronouns
 
-In the new model, male, female, non-conforming, and neuter are each separate properties, so that a thing is "male" or "not male", "female" or "not female", "non-conforming" or "not non-conforming", and "neuter" or "not neuter".  
+In the new model, male, female, singular-they, and neuter are each separate properties, so that a thing is "male" or "not male", "female" or "not female", "singular-they" or "not singular-they", and "neuter" or "not neuter".  
 
 The gender is primarily for pronoun purposes. 
 When the player types "HE", anything male will match.
 When the player types, "SHE", anything female will match.
-When the player types "THEY", anything non-conforming will match. 
+When the player types "THEY", anything singular-they will match. 
 When the player types "IT", anything neuter will match.  
 Something which is none of the four will never match any singular pronoun, which is not usually desirable, but may occasionally be useful (e.g. "The Exalted One shall not be referred to by pronouns!").
 
-If you define a "man" or "men", it will by default be male, and not female, non-conforming, or neuter.
-If you define a "woman" or "women", it will by default be female, and not male, non-conforming, or neuter.
-If you define a "nonbinary" or "nonbinaries", it will by default be non-conforming, and not male, female, or neuter.
-If you define a "person" or "people", it will by default be male, female, and non-conforming, but not neuter.  This makes more sense than it might at first appear; a person of unknown gender can be referred to as "he", "she", or "they" by the player.
-If you define a "thing" or an "animal", it will by default be neuter, and not male, female, or non-conforming.
+If you define a "man" or "men", it will by default be male, and not female, singular-they, or neuter.
+If you define a "woman" or "women", it will by default be female, and not male, singular-they, or neuter.
+If you define a "nonbinary" or "nonbinaries", it will by default be singular-they, and not male, female, or neuter.
+If you define a "person" or "people", it will by default be male, female, and singular-they, but not neuter.  This makes more sense than it might at first appear; a person of unknown gender can be referred to as "he", "she", or "they" by the player.
+If you define a "thing" or an "animal", it will by default be neuter, and not male, female, or singular-they.
 
 All of these can be overrriden and changed by specifying things like:
 	Tracy is not male.
 	Tracy is not female.
-	Tracy is not non-conforming.
+	Tracy is not singular-they.
 	Tracy is neuter.
 
 The parser will update and recognize the appropriate pronouns when used by the player.  So a character who is both male and female can be referred to as "he" or "she" by the player, a ship can be referred to as "it" or "she", etc.
 
 A similarly flexible model is implemented for number.  Any object which is plural-named or ambiguously plural can be referred to as "THEY".  Any object which is ambiguously plural can additionally be referred to using the singular pronouns -- whichever ones apply according to its gender.
 
-So an ambiguously plural, male, female, non-conforming, neuter thing can be referred to by any of the pronouns THEY, HE, SHE, IT.  Even if it's singular-named.
-	The jumble is an ambiguously plural, male, female, non-conforming, neuter thing.  
+So an ambiguously plural, male, female, singular-they, neuter thing can be referred to by any of the pronouns THEY, HE, SHE, IT.  Even if it's singular-named.
+	The jumble is an ambiguously plural, male, female, singular-they, neuter thing.  
 	The description of the jumble is "Things and people, all in a jumble! [They] [are] quite something."
 
 The concept of "ambiguously plural" items is present in the Standard Rules but is not fully implemented.  (A singular-named ambiguously plural item will not match "they" in the Standard Rules.  It will match with Gender Options active.)
@@ -1160,13 +1232,13 @@ Section - Advice on the gender model
 
 This is designed to be a plug-in extension which requires no change in existing code and keeps the same behavior if you have been using "man", "woman", or "animal".  If you have been using "person" to refer to generic non-gendered people and using "ambiguously plural" appropriately, this should simply improve the pronoun behavior with no code changes necessary.   But there may be some changes required if you have been using explicit gender adjectives.
 
-This is because now male, female, non-conforming, and neuter are entirely separate traits; setting one does not set another.  Consider this code:
+This is because now male, female, singular-they, and neuter are entirely separate traits; setting one does not set another.  Consider this code:
 	Tracy is a person.
 	Tracy is male.
 	
-Because the default for "person" is male, female, and non-conforming, responding to "him", "her", and "them", this makes Tracy male, female, and non-conforming; the "male" adjective does nothing.  If you want to make Tracy a man (male and not female or non-conforming), you would have to do this:
+Because the default for "person" is male, female, and singular-they, responding to "him", "her", and "them", this makes Tracy male, female, and singular-they; the "male" adjective does nothing.  If you want to make Tracy a man (male and not female or singular-they), you would have to do this:
 	Now Tracy is not female.
-	Now Tracy is non non-conforming.
+	Now Tracy is non singular-they.
 
 Now suppose you want to change Tracy from a man to a woman (female and not male).  You'll have to make two statements:
 	Now Tracy is female.
@@ -1247,7 +1319,7 @@ For reference, this is the procedure currently used in the Standard Rules as of 
 	If person is the player, the pronoun appropriate to the story viewpoint is used.
 	If person is plural, plural form ("they") is used.
 	Otherwise, if person is female, female form ("her") is used.
-	Otherwise, if person is non-conforming, non-conforming form ("them") is used.
+	Otherwise, if person is singular-they, singular-they form ("them") is used.
 	Otherwise, if person is neuter, neuter form ("it") is used.
 	Otherwise, male form ("him") is used.
 
@@ -1287,7 +1359,7 @@ Gender Options is incompatible with Second Gender by Felix Larsson.  The two do 
 Section - Changelog
 
 Inclusive Gender Options by Philip Riley:
-	4.1 - Added the non-conforming gender, nonbinary person, and the singular they pronoun. 
+	4.1 - Added the singular-they gender, nonbinary person, and the singular they pronoun. 
 	
 Gender Options by Nathanael Nerode:
 	4.0.220530 - Section number removal in documentation to accommodate automatic section numbering
@@ -1360,7 +1432,7 @@ Example: * City Park - This consists of a room with items featuring most of the 
 	Description of the sunbathers is "A mixed-gender group is out bathing in the sun."
 	Sunbathers are male.
 	Sunbathers are female.
-	Sunbathers are non-conforming.
+	Sunbathers are singular-they.
 	Sunbathers are ambiguously plural.
 	Sunbathers are plural-named.
 	Sunbathers are not proper-named.
@@ -1479,9 +1551,9 @@ Example: * No0neman's Test - No0neman wanted to make sure that Alex would no lon
 
 	The starting room is a room.
 
-	The player is in the starting room. The player is not female. The player is not non-conforming. The player is not neuter.
+	The player is in the starting room. The player is not female. The player is not singular-they. The player is not neuter.
 
-	Alex is a person. Alex is not male. Alex is not female. Alex is not non-conforming.
+	Alex is a person. Alex is not male. Alex is not female. Alex is not singular-they.
 
 	Alex is in the starting room.
 
@@ -1504,7 +1576,7 @@ Example: * No0neman's Test - No0neman wanted to make sure that Alex would no lon
 	Carry out feminizing:
 		now the noun is not neuter;
 		now the noun is not male;
-		now the noun is not non-conforming;
+		now the noun is not singular-they;
 		now the noun is female;
 		set pronouns from the noun;
 		unset pronouns from the noun;
@@ -1512,7 +1584,7 @@ Example: * No0neman's Test - No0neman wanted to make sure that Alex would no lon
 	Carry out masculinizing:
 		now the noun is not neuter;
 		now the noun is not female;
-		now the noun is not non-conforming;
+		now the noun is not singular-they;
 		now the noun is male;
 		set pronouns from the noun;
 		unset pronouns from the noun;
@@ -1520,7 +1592,7 @@ Example: * No0neman's Test - No0neman wanted to make sure that Alex would no lon
 	Carry out ungendering:
 		now the noun is not neuter;
 		now the noun is not female;
-		now the noun is non-conforming;
+		now the noun is singular-they;
 		set pronouns from the noun;
 		unset pronouns from the noun;
 
@@ -1528,81 +1600,81 @@ Example: * No0neman's Test - No0neman wanted to make sure that Alex would no lon
 		now the noun is neuter;
 		now the noun is not female;
 		now the noun is not male;
-		now the noun is not non-conforming;
+		now the noun is not singular-they;
 		set pronouns from the noun;
 		unset pronouns from the noun;
 
-	test unsetting with "masculinize alex / x him / x her / x them / x it / feminize alex / x him / x her / x them / x it / ungender alex / x him / x her / x them / x it"
+	test unsetting with "masculinize alex / x him / x her / x them / x it / feminize alex / x him / x her / x them / x it / ungender alex / x him / x her / x them / x it / neuter alex / x him / x her / x them / x it"
 	
-Example: * Andy's Chocolate - Testing special third person mode
+Example: * The Third Person - Testing special third person mode
 
 	*: "The Third Person"
 
-Include Inclusive Gender Options by Philip Riley.
+	Include Inclusive Gender Options by Philip Riley.
 
-The starting room is a room.
-Some chocolate is an edible thing in the starting room.
+	The starting room is a room.
+	Some chocolate is an edible thing in the starting room.
 
-The player is in the starting room. The third singular pronoun is the he-pronoun. [Defaults to the singular-they-pronoun.]
+	The player is in the starting room. The third singular pronoun is the he-pronoun. [Defaults to the singular-they-pronoun.]
 
-[Need this or the game will print the player's name as "himself", "herself", etc.]
-Rule for printing the name of yourself:
-	say "Andy";
+	[Need this or the game will print the player's name as "himself", "herself", etc.]
+	Rule for printing the name of yourself:
+		say "Andy";
 
-Special third person mode is true.
+	Special third person mode is true.
 
-When play begins:
-	Now the story viewpoint is third person singular;
+	When play begins:
+		Now the story viewpoint is third person singular;
 	
-To love is a verb. To keep is a verb.
+	To love is a verb. To keep is a verb.
 
-Instead of eating the chocolate:
-	say "[We] [eat] [the chocolate]. [We] [love] chocolate, and generally [keep] it all to [ourselves].";
+	Instead of eating the chocolate:
+		say "[We] [eat] [the chocolate]. [We] [love] chocolate, and generally [keep] it all to [ourselves].";
 
-Feminizing is an action applying to nothing.
+	Feminizing is an action applying to nothing.
 
-Masculinizing is an action applying to nothing.
+	Masculinizing is an action applying to nothing.
 
-Ungendering is an action applying to nothing.
+	Ungendering is an action applying to nothing.
 
-Neuterizing is an action applying to nothing.	
+	Neuterizing is an action applying to nothing.	
 
-Understand "feminize" as feminizing.
+	Understand "feminize" as feminizing.
 
-Understand "masculinize" as masculinizing.
+	Understand "masculinize" as masculinizing.
 
-Understand "ungender" as ungendering.
+	Understand "ungender" as ungendering.
 
-Understand "neuter" as neuterizing.
+	Understand "neuter" as neuterizing.
 
-Carry out feminizing:
-	now the player is not neuter;
-	now the player is not male;
-	now the player is not non-conforming;
-	now the player is female;
-	now the third singular pronoun of the player is the she-pronoun;
+	Carry out feminizing:
+		now the player is not neuter;
+		now the player is not male;
+		now the player is not singular-they;
+		now the player is female;
+		now the third singular pronoun of the player is the she-pronoun;
 
-Carry out masculinizing:
-	now the player is not neuter;
-	now the player is not female;
-	now the player is not non-conforming;
-	now the player is male;
-	now the third singular pronoun of the player is the he-pronoun;
+	Carry out masculinizing:
+		now the player is not neuter;
+		now the player is not female;
+		now the player is not singular-they;
+		now the player is male;
+		now the third singular pronoun of the player is the he-pronoun;
 
-Carry out ungendering:
-	now the player is not neuter;
-	now the player is not female;
-	now the player is not male;
-	now the player is non-conforming;
-	now the third singular pronoun of the player is the singular-they-pronoun;
+	Carry out ungendering:
+		now the player is not neuter;
+		now the player is not female;
+		now the player is not male;
+		now the player is singular-they;
+		now the third singular pronoun of the player is the singular-they-pronoun;
 
-Carry out neuterizing:
-	now the player is neuter;
-	now the player is not female;
-	now the player is not male;
-	now the player is not non-conforming;
-	now the third singular pronoun of the player is the it-pronoun;
+	Carry out neuterizing:
+		now the player is neuter;
+		now the player is not female;
+		now the player is not male;
+		now the player is not singular-they;
+		now the third singular pronoun of the player is the it-pronoun;
 
-test me with "eat chocolate / feminize / eat chocolate / ungender / eat chocolate / neuter / eat chocolate / masculinize / eat chocolate".
+	test me with "eat chocolate / feminize / eat chocolate / ungender / eat chocolate / neuter / eat chocolate / masculinize / eat chocolate".
 
 	
