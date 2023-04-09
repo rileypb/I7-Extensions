@@ -2,7 +2,7 @@ Trees by Philip Riley begins here.
 
 Volume 1 - Definitions
 
-DEBUG is always false.
+DEBUG is a truth state that varies. DEBUG is usually true.
 To DBG (txt - a text):
 	if DEBUG is true:
 		say "DBG: [txt][line break]";
@@ -15,12 +15,12 @@ An insertion strategy is a kind of value.
 The insertion strategies are add child and sorted binary.
 
 A traversal strategy is a kind of value.
-The traversal strategies are breadth first, depth first, and binary traversal.
+The traversal strategies are level-order, preorder, postorder, and in-order.
 
 A tree cursor is a kind of object. A tree cursor has a table name called the table.
 A tree cursor has a number called the node id. The node id of a tree cursor is usually 1.
 A tree cursor has an insertion strategy called the insertion-strategy. The insertion-strategy of a tree cursor is usually add child.
-A tree cursor has a traversal strategy called the traversal-strategy. The traversal-strategy of a tree cursor is usually breadth first.
+A tree cursor has a traversal strategy called the traversal-strategy. The traversal-strategy of a tree cursor is usually level-order.
 A tree cursor has a list of numbers called the node stack.
 
 To push (cursor - a tree cursor):
@@ -67,6 +67,9 @@ To set (cursor - a tree cursor) to (obj - an object):
 To decide what object is the value at (cursor - a tree cursor):
 	decide on the object produced by the tree-reading rules for cursor;
 	
+To decide what number is the depth at (cursor - a tree cursor):
+	decide on the depth corresponding to an id of (node id of cursor) in table of cursor;
+	
 To decide what list of numbers is the children of (cursor - a tree cursor):
 	sort table of cursor in order order;
 	sort table of cursor in parent id order;
@@ -97,12 +100,14 @@ To simply insert (X - an object) into (cursor - a tree cursor) as child (N - a n
 	let new id be number of filled rows in table of cursor + 1;
 	choose row with id of (node id of cursor) from table of cursor;
 	let child ids be child ids entry;
+	let parent depth be the depth entry;
 	add new id to child ids;
 	now child ids entry is child ids;	
 	choose a blank row in the table of cursor;
 	now id entry is new id;
 	now parent id entry is node id of cursor;
 	now order entry is N;
+	now depth entry is parent depth;
 	now child ids entry is { };
 	DBG "now set node to [X].";
 	move cursor to id entry;
@@ -141,6 +146,7 @@ To insert (X - an object) into (cursor - a tree cursor):
 To visit (cursor - a tree cursor) with (R - a rule):
 	DBG "visit [node id of cursor]";
 	let T be the list of numbers produced by the traversal rules for the cursor;
+	now the cursor in question is cursor;
 	DBG "traverse over ids: [T]";
 	repeat with i running through T:
 		move cursor to i;
@@ -164,8 +170,8 @@ Traversal is a tree cursor based rulebook producing lists of numbers.
 
 Volume 4 - Individual Rules
 
-Traversal rule for a tree cursor (called cursor) when the traversal-strategy of cursor is breadth first (this is the breadth first rule):
-	DBG "breadth first traversal rule";
+Traversal rule for a tree cursor (called cursor) when the traversal-strategy of cursor is level-order (this is the level-order rule):
+	DBG "level-order traversal rule";
 	push cursor;
 	let R be a list of numbers;
 	add node id of cursor to R;
@@ -181,8 +187,8 @@ Traversal rule for a tree cursor (called cursor) when the traversal-strategy of 
 	pop cursor;
 	rule succeeds with result R;
 
-Traversal rule for a tree cursor (called cursor) when the traversal-strategy of cursor is binary traversal (this is the binary rule):
-	DBG "binary traversal rule";
+Traversal rule for a tree cursor (called cursor) when the traversal-strategy of cursor is in-order (this is the in-order rule):
+	DBG "in-order traversal rule";
 	push cursor;
 	DBG "cursor = [node id of cursor]";
 	let R be a list of numbers;	
@@ -206,6 +212,34 @@ Traversal rule for a tree cursor (called cursor) when the traversal-strategy of 
 	pop cursor;
 	rule succeeds with result R;
 	
-
+Traversal rule for a tree cursor (called cursor) when the traversal-strategy of cursor is preorder (this is the preorder rule):
+	DBG "preorder traversal rule";
+	push cursor;
+	DBG "cursor = [node id of cursor]";
+	let R be a list of numbers;	
+	add node id of cursor to R;
+	repeat with child running through children of cursor:
+		DBG "child = [child]";
+		move cursor to child;
+		let R1 be the list of numbers produced by the traversal rules for cursor;
+		DBG "R1 = [R1]";
+		add R1 to R;
+	pop cursor;
+	rule succeeds with result R;
+	
+Traversal rule for a tree cursor (called cursor) when the traversal-strategy of cursor is postorder (this is the postorder rule):
+	DBG "postorder traversal rule";
+	push cursor;
+	DBG "cursor = [node id of cursor]";
+	let R be a list of numbers;	
+	repeat with child running through children of cursor:
+		DBG "child = [child]";
+		move cursor to child;
+		let R1 be the list of numbers produced by the traversal rules for cursor;
+		DBG "R1 = [R1]";
+		add R1 to R;
+	pop cursor;
+	add node id of cursor to R;
+	rule succeeds with result R;
 
 Trees ends here.
